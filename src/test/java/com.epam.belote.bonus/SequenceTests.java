@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class SequenceTests {
+
     @Test
     public void sequenceWith3Cards(){
         List<CardType> cardList = new ArrayList<CardType>(

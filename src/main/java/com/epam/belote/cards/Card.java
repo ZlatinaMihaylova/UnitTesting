@@ -58,4 +58,12 @@ public class Card {
     public int hashCode() {
         return type.hashCode() * suit.hashCode();
     }
+
+    @Override
+    public String toString() {
+        return "Card{" +
+                "type=" + type +
+                ", suit=" + suit +
+                '}';
+    }
 }

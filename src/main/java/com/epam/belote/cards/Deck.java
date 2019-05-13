@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 import static java.util.Collections.unmodifiableList;
 
-public class Deck {
+public class Deck<main> {
 
     private List<Card> cards = new LinkedList<>();
 
@@ -25,6 +25,10 @@ public class Deck {
        Card card = cards.get(0);
        cards.remove(0);
        return card;
+    }
+
+    public void showCards() {
+        cards.stream().forEach(System.out::println);
     }
 
     public List<Card> takeNCards(int numberOfCards) {
@@ -59,5 +63,18 @@ public class Deck {
             cards.set(cards.size() - 1, firstCard);
         }
     }
+
+    public static void main(String[] args) {
+        Deck deck = new Deck();
+        deck.shuffle();
+        deck.showCards();
+
+        Collections.sort(deck.cards, new CardComparator());
+        System.out.println("************************************");
+        deck.showCards();
+
+    }
+
+
 
 }

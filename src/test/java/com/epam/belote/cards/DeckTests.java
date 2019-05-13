@@ -8,7 +8,8 @@ public class DeckTests {
 
     @Test
     public void deckCreationSize(){
-        Assert.assertEquals(32, Deck.getInstance().getCards().size());
+        Deck deck = new Deck();
+        Assert.assertEquals(32, deck.getCards().size());
     }
 
     @Test

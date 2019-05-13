@@ -1,10 +1,15 @@
 package com.epam.belote.bonus;
 
+import com.epam.belote.cards.CardComparator;
 import com.epam.belote.cards.CardSuit;
 import com.epam.belote.cards.CardType;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
+import static java.util.Collections.max;
 import static java.util.Collections.unmodifiableList;
 
 /**
@@ -28,6 +33,7 @@ public class Sequence implements Bonus {
     }
 
     public int getBonus() {
+
         switch (cards.size()) {
             case 3:
                 return 20;
@@ -40,5 +46,19 @@ public class Sequence implements Bonus {
         // returns 50 for 4 cards sequence
         // return 100 for 5 or more cards sequence
 
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Sequence sequence = (Sequence) o;
+        return suit == sequence.suit &&
+                Objects.equals(cards, sequence.cards);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(suit, cards);
     }
 }

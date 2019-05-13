@@ -12,7 +12,7 @@ public class CardHand {
     private CardSuit trump;
 
     CardHand(Map<Card, Player> hand, CardSuit trump) {
-        this.hand = new TreeMap<>(new CardComparator(trump));
+        this.hand = new TreeMap<>(new CardComparator());
         this.hand = hand;
         this.trump = trump;
     }

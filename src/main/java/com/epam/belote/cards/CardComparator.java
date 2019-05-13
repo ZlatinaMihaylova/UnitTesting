@@ -4,14 +4,12 @@ import java.util.Comparator;
 
 public class CardComparator implements Comparator<Card> {
 
-    private CardSuit trump;
-
-    CardComparator(CardSuit trump) {
-        this.trump = trump;
-    }
 
     public int compare(Card card1, Card card2) {
-        return card1.getCardPoints(trump) - card2.getCardPoints(trump);
+        if ( card1.getSuit().equals(card2.getSuit())) {
+            return card1.getType().getSequencePosition() - card2.getType().getSequencePosition();
+        }
+        return card1.getSuit().compareTo(card2.getSuit());
     }
 
 
