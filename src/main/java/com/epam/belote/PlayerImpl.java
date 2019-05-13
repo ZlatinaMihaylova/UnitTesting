@@ -12,13 +12,16 @@ import java.util.Set;
 
 public class PlayerImpl implements Player{
 
-    private String name;
     private Team team;
     private Set<Card> playerCards = new HashSet<>();
+    private String name;
 
-    public PlayerImpl(String name,Team team) {
+    public PlayerImpl(String name) {
         this.name = name;
-        this.team = team;
+    }
+
+    public void addCards(List<Card> cards) {
+        this.playerCards.addAll(cards);
     }
 
     @Override

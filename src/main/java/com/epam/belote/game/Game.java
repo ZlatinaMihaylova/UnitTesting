@@ -1,29 +1,29 @@
 package com.epam.belote.game;
 
-import com.epam.belote.Bid;
-import com.epam.belote.Player;
-import com.epam.belote.PlayerImpl;
-import com.epam.belote.Team;
+import com.epam.belote.*;
 import com.epam.belote.cards.CardSuit;
 import com.epam.belote.cards.Deck;
 
 import java.util.*;
 
-public class Game {
-
-    private static Game instance = null;
+public class Game implements CardDealer {
 
     private Team firstTeam;
     private Team secondTeam;
     private final List<PlayerImpl> playersPositions = new LinkedList<PlayerImpl>();
     private Deck deck;
 
+    private PlayerImpl playerUnderHand;
+
     private List<Round> rounds = new ArrayList<>();
 
-    Game(Team firstTeam,Team secondTeam) {
-        this.firstTeam = firstTeam;
-        this.secondTeam = secondTeam;
+    Game() {
+        this.firstTeam = new Team("Team 1");
+        this.secondTeam = new Team("Team 2");
         setPlayersPositions();
+        this.deck = new Deck();
+
+        this.playerUnderHand = firstTeam.getFirstPlayer();
     }
 
     void setPlayersPositions() {
@@ -49,4 +49,22 @@ public class Game {
         return false;
     }
 
+    private void dealNumberOfCards(int cardsNumber) {
+        PlayerImpl nextPlayer = playerUnderHand;
+        for (int playerCount = 0; playerCount <4; playerCount ++) {
+            nextPlayer.addCards(deck.takeNCards(cardsNumber));
+            nextPlayer = getPlayerInNextPosition(playerUnderHand);
+        }
+    }
+
+    @Override
+    public void deal5Cards() {
+        dealNumberOfCards(3);
+        dealNumberOfCards(2);
+    }
+
+    @Override
+    public void deal3Cards() {
+        dealNumberOfCards(3);
+    }
 }

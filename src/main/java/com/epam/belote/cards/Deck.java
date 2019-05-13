@@ -3,16 +3,17 @@ package com.epam.belote.cards;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.util.Collections.unmodifiableList;
 
 public class Deck {
 
-    private static Deck deck  = null;
-    private List<Card> cards = new ArrayList<Card>();
+    private List<Card> cards = new LinkedList<>();
 
-    private Deck() {
+    public Deck() {
         for (CardType cardType : CardType.values()) {
             for ( CardSuit cardSuit : CardSuit.values()) {
                 cards.add( new Card(cardType, cardSuit));
@@ -20,17 +21,22 @@ public class Deck {
         }
     }
 
-    static Deck getInstance() {
-        if ( deck == null) {
-            deck = new Deck();
-        }
-        return deck;
+    public Card takeCard() {
+       Card card = cards.get(0);
+       cards.remove(0);
+       return card;
     }
 
-    public Card takeCard() {
-        Card card = cards.get(0);
-        cards.remove(0);
-        return card;
+    public List<Card> takeNCards(int numberOfCards) {
+        List<Card> firstNCards = cards.stream().limit(numberOfCards).collect(Collectors.toList());
+        for ( int countCards = 0; countCards <numberOfCards; countCards ++) {
+            cards.remove(0);
+        }
+        return firstNCards;
+    }
+
+    public void addCardsBack(List<Card> cards) {
+        this.cards.addAll(cards);
     }
 
     public List<Card> getCards() {
@@ -52,12 +58,6 @@ public class Deck {
             }
             cards.set(cards.size() - 1, firstCard);
         }
-    }
-
-    public static void main(String[] args) {
-
-
-
     }
 
 }
