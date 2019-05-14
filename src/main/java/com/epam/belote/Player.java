@@ -21,7 +21,7 @@ public interface Player {
     /**
      * When the game starts each player plays a single card per turn. There are 32 cards and 4 players therefore a game consists of 8 turns
      */
-    Card playCard(Card card);
+    Card playCard();
 
     Team getTeam();
 }

@@ -1,7 +1,6 @@
 package com.epam.belote;
 
 import com.epam.belote.cards.Card;
-import com.epam.belote.game.Game;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -22,17 +21,40 @@ public class Team {
         this.secondPlayer = new PlayerImpl(name + " - second player");
     }
 
-    public void addScore(Bid bid) {
-        int roundScore = 0;
+    public static int roundScore(int score, Bid bid) {
+        int roundNumber = 0;
+        switch (bid) {
+            case ALL_TRUMPS:
+                roundNumber = 4;
+                break;
+            case NO_TRUMPS:
+                roundNumber = 5;
+                break;
+            default:
+                roundNumber = 6;
+        }
+
+        if (score % 10 > roundNumber) {
+            return score / 10 + 1;
+        }
+        return score / 10;
+    }
+
+    public int calculateScore(Bid bid) {
+        int currentRoundScore = 0;
         for ( Card card : takenCards) {
             if ( bid.equals(Bid.ALL_TRUMPS)) {
-                roundScore += card.getCardPoints(card.getSuit());
+                currentRoundScore += card.getCardPoints(card.getSuit());
             }
             else {
-                roundScore += card.getCardPoints(bid.getSuit());
+                currentRoundScore += card.getCardPoints(bid.getSuit());
             }
         }
-        score += roundScore / 10;
+        return currentRoundScore;
+    }
+
+    public void addScore(Bid bid) {
+        this.score += roundScore(calculateScore(bid), bid);
     }
 
     public List<Card> returnCardsInDeck() {
@@ -42,7 +64,13 @@ public class Team {
         return cards;
     }
 
+    public void takeCards(List<Card> cards) {
+        this.takenCards.addAll(cards);
+    }
 
+    public int getScore() {
+        return score;
+    }
 
     public boolean hasWinningScore() {
         return score > WINNING_SCORE;

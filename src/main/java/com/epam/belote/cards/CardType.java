@@ -20,4 +20,6 @@ public enum CardType {
     public int getSequencePosition() {
         return sequencePosition;
     }
+
+
 }

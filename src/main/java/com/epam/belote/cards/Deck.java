@@ -1,7 +1,6 @@
 package com.epam.belote.cards;
 
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -40,7 +39,12 @@ public class Deck<main> {
     }
 
     public void addCardsBack(List<Card> cards) {
-        this.cards.addAll(cards);
+        if ( this.cards.size() + cards.size() <= 32){
+            this.cards.addAll(cards);
+        }
+        else {
+            throw new IllegalArgumentException();
+        }
     }
 
     public List<Card> getCards() {
@@ -63,18 +67,5 @@ public class Deck<main> {
             cards.set(cards.size() - 1, firstCard);
         }
     }
-
-    public static void main(String[] args) {
-        Deck deck = new Deck();
-        deck.shuffle();
-        deck.showCards();
-
-        Collections.sort(deck.cards, new CardComparator());
-        System.out.println("************************************");
-        deck.showCards();
-
-    }
-
-
 
 }

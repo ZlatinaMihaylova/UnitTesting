@@ -1,10 +1,13 @@
 package com.epam.belote.game;
 
-import com.epam.belote.*;
-import com.epam.belote.cards.CardSuit;
+import com.epam.belote.Bid;
+import com.epam.belote.CardDealer;
+import com.epam.belote.PlayerImpl;
+import com.epam.belote.Team;
 import com.epam.belote.cards.Deck;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Game implements CardDealer {
 
@@ -90,7 +93,6 @@ public class Game implements CardDealer {
         if (!currentBid.equals(Bid.PASS)) {
             dealNumberOfCards(3);
         }
-
     }
 
     public void nextRound() {
@@ -110,6 +112,9 @@ public class Game implements CardDealer {
 
         }
         this.currentBid = Bid.PASS;
+    }
 
+    public void setHasValat(boolean hasValat){
+        this.hasValat = hasValat;
     }
 }

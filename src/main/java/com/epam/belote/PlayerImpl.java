@@ -5,11 +5,8 @@ import com.epam.belote.bonus.Quad;
 import com.epam.belote.bonus.Sequence;
 import com.epam.belote.cards.Card;
 import com.epam.belote.cards.CardComparator;
-import com.epam.belote.cards.CardSuit;
 import com.epam.belote.cards.CardType;
-import com.epam.belote.game.Game;
 
-import java.time.temporal.Temporal;
 import java.util.*;
 
 public class PlayerImpl implements Player{
@@ -29,11 +26,10 @@ public class PlayerImpl implements Player{
 
 
     public Set<Bonus> returnSequences() {
-        Set<Bonus> bonuses = new HashSet<Bonus>();
+        Set<Bonus> bonuses = new HashSet<>();
 
         Collections.sort(playerCards, new CardComparator());
-        System.out.println(getPlayerCards().toString() );
-        List<CardType> cards = new LinkedList<>();
+        List<CardType> cards = new ArrayList<>();
 
         cards.add(playerCards.get(0).getType());
         for (int cardPosition = 1; cardPosition < playerCards.size(); cardPosition ++ ) {
@@ -43,14 +39,14 @@ public class PlayerImpl implements Player{
             if (previousCard.getType().getSequencePosition() + 1 != currentCard.getType().getSequencePosition() ||
                     !previousCard.getSuit().equals(currentCard.getSuit())) {
                 if ( cards.size() > 2 ) {
-                    bonuses.add(new Sequence(playerCards.get(cardPosition).getSuit(), cards ));
+                    bonuses.add(new Sequence(playerCards.get(cardPosition - 1).getSuit(), new ArrayList<>(cards) ));
                 }
                 cards.clear();
             }
             cards.add(playerCards.get(cardPosition).getType());
 
-            if ( cardPosition == playerCards.size() - 1 && cards.size() > 2) {
-                bonuses.add(new Sequence(playerCards.get(cardPosition).getSuit(), cards ));
+            if (cards.size() > 2 && cardPosition == playerCards.size() - 1 ) {
+                bonuses.add(new Sequence(playerCards.get(cardPosition).getSuit(), new ArrayList<>(cards) ));
             }
         }
         return bonuses;
@@ -96,12 +92,13 @@ public class PlayerImpl implements Player{
     }
 
     @Override
-    public Card playCard(Card card) {
-        if ( playerCards.contains(card)) {
-            playerCards.remove(card);
-            return card;
+    public Card playCard() {
+        if ( playerCards.isEmpty()){
+            throw new IllegalStateException();
         }
-        return null;
+        Card card = playerCards.get(new Random().nextInt(playerCards.size() + 1));
+        playerCards.remove(card);
+        return card;
     }
 
     public List<Card> returnCardsInDeck() {
