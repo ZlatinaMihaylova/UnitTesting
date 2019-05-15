@@ -234,8 +234,8 @@ public class PlayerTests {
     @Test
     public void biding() {
         PlayerImpl player = Mockito.mock(PlayerImpl.class);
-        Bid expected = Bid.ALL_TRUMPS;
-        Mockito.when(player.bid()).thenReturn(Bid.ALL_TRUMPS);
+        Bid expected = Bid.CLUBS_TRUMP;
+        Mockito.when(player.bid()).thenReturn(Bid.CLUBS_TRUMP);
 
         Assert.assertEquals(expected,player.bid());
     }

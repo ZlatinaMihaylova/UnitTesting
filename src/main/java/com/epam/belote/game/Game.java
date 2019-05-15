@@ -1,13 +1,11 @@
 package com.epam.belote.game;
 
-import com.epam.belote.Bid;
-import com.epam.belote.CardDealer;
-import com.epam.belote.PlayerImpl;
-import com.epam.belote.Team;
+import com.epam.belote.*;
 import com.epam.belote.cards.Deck;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 public class Game implements CardDealer {
 
@@ -29,6 +27,7 @@ public class Game implements CardDealer {
         this.deck = new Deck();
 
         this.playerUnderHand = firstTeam.getFirstPlayer();
+        this.currentBid = Bid.PASS;
     }
 
     public static Game getInstance() {
@@ -54,13 +53,6 @@ public class Game implements CardDealer {
         }
     }
 
-    public boolean checkForWinning() {
-        if ( (firstTeam.hasWinningScore() || secondTeam.hasWinningScore()) && !hasValat) {
-            return true;
-        }
-        return false;
-    }
-
     private void dealNumberOfCards(int cardsNumber) {
         PlayerImpl nextPlayer = playerUnderHand;
         for (int playerCount = 0; playerCount <4; playerCount ++) {
@@ -79,11 +71,18 @@ public class Game implements CardDealer {
         PlayerImpl nextPlayer = playerUnderHand;
         for (int playerCount = 0; playerCount < 4; playerCount ++) {
             Bid bid = nextPlayer.bid();
-
+            System.out.println(bid.toString());
             if ( bid.getStrength() > currentBid.getStrength()) {
                 currentBid = bid;
             }
+            nextPlayer = getPlayerInNextPosition(playerUnderHand);
+        }
+    }
 
+    public void returnCardsAfterPass() {
+        PlayerImpl nextPlayer = playerUnderHand;
+        for (int playerCount = 0; playerCount < 4; playerCount ++) {
+            deck.addCardsBack(nextPlayer.returnCardsInDeck());
             nextPlayer = getPlayerInNextPosition(playerUnderHand);
         }
     }
@@ -95,26 +94,46 @@ public class Game implements CardDealer {
         }
     }
 
+    public void endRound() {
+        firstTeam.addScore(currentBid);
+        deck.addCardsBack(firstTeam.returnCardsInDeck());
+
+        secondTeam.addScore(currentBid);
+        deck.addCardsBack(secondTeam.returnCardsInDeck());
+
+    }
+
     public void nextRound() {
-        this.playerUnderHand = getPlayerInNextPosition(playerUnderHand);
-        if ( currentBid.equals(Bid.PASS)) {
-            PlayerImpl nextPlayer = playerUnderHand;
-            for (int playerCount = 0; playerCount <4; playerCount ++) {
-                deck.addCardsBack(nextPlayer.returnCardsInDeck());
-                nextPlayer = getPlayerInNextPosition(playerUnderHand);
-            }
-        } else {
-            firstTeam.addScore(currentBid);
-            deck.addCardsBack(firstTeam.returnCardsInDeck());
-
-            secondTeam.addScore(currentBid);
-            deck.addCardsBack(secondTeam.returnCardsInDeck());
-
-        }
         this.currentBid = Bid.PASS;
+        this.playerUnderHand = getPlayerInNextPosition(playerUnderHand);
+        this.deck.cut(new Random().nextInt(32));
     }
 
     public void setHasValat(boolean hasValat){
         this.hasValat = hasValat;
     }
+
+    public boolean checkForWinning() {
+        if ( (firstTeam.hasWinningScore() || secondTeam.hasWinningScore()) && !hasValat) {
+            return true;
+        }
+        return false;
+    }
+
+    public Team getWinningTeam() {
+        return (firstTeam.getScore() > secondTeam.getScore()) ? firstTeam : secondTeam;
+    }
+
+    public Deck getDeck() {
+        return deck;
+    }
+
+    public Bid getCurrentBid() {
+        return currentBid;
+    }
+
+    public PlayerImpl getPlayerUnderHand() {
+        return this.playerUnderHand;
+    }
+
 }

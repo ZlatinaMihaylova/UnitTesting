@@ -47,7 +47,13 @@ public class DeckTests {
     }
 
     @Test
-    public void takeFirstTreeCardsCards(){
+    public void takeOneCardAgain(){
+        deck.takeCard();
+        Assert.assertEquals(31, deck.getCards().size());
+    }
+
+    @Test
+    public void takeFirstTreeCards(){
         List<Card> cards = new ArrayList<Card>(
                 Arrays.asList(
                         new Card(CardType.SEVEN, CardSuit.CLUBS),
